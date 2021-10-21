@@ -12,13 +12,14 @@ public class Ps1h0Game extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		img = new Texture("background.jpg");
 	}
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
+		batch.draw(img,0,0);
 		batch.draw(img, 0, 0);
 		batch.end();
 	}
