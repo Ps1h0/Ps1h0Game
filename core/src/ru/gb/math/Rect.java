@@ -77,7 +77,7 @@ public class Rect {
     }
 
     public void setBottom(float bottom){
-        pos.y = bottom = halfHeight;
+        pos.y = bottom + halfHeight;
     }
 
     public void setWidth(float width){
