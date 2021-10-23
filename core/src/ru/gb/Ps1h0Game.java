@@ -1,9 +1,10 @@
-package gb.ru;
+package ru.gb;
 
 import com.badlogic.gdx.Game;
-import gb.ru.screen.MenuScreen;
 
-public class Ps1hoGame extends Game {
+import ru.gb.screen.MenuScreen;
+
+public class Ps1h0Game extends Game {
 
 	@Override
 	public void create () {
