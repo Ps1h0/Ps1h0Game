@@ -1,6 +1,7 @@
 package ru.gb.sprite;
 
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
@@ -13,11 +14,13 @@ public class Ship extends Sprite {
     private static final float PADDING = 0.03f;
 
     private final Vector2 v;
+    private final Vector2 v0;
     private Rect worldBounds;
 
     public Ship(TextureAtlas atlas) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
-        v = new Vector2(0, 0);
+        v = new Vector2();
+        v0 = new Vector2(0.5f, 0);
     }
 
     @Override
@@ -29,7 +32,7 @@ public class Ship extends Sprite {
 
     @Override
     public void update(float delta) {
-        checkBounds();
+        pos.mulAdd(v, delta);
     }
 
     private void checkBounds(){
@@ -46,11 +49,49 @@ public class Ship extends Sprite {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        return super.touchDown(touch, pointer, button);
+        return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        return super.touchUp(touch, pointer, button);
+        return false;
+    }
+
+    public boolean keyDown(int keycode) {
+        switch (keycode){
+            case Input.Keys.A:
+            case Input.Keys.LEFT:
+                moveLeft();
+                break;
+            case Input.Keys.D:
+            case Input.Keys.RIGHT:
+                moveRight();
+                break;
+        }
+        return false;
+    }
+
+    public boolean keyUp(int keycode) {
+        switch (keycode){
+            case Input.Keys.A:
+            case Input.Keys.LEFT:
+            case Input.Keys.D:
+            case Input.Keys.RIGHT:
+                stop();
+                break;
+        }
+        return false;
+    }
+
+    private void moveRight(){
+        v.set(v0);
+    }
+
+    private void moveLeft(){
+        v.set(v0).rotateDeg(180);
+    }
+
+    private void stop(){
+        v.setZero();
     }
 }
