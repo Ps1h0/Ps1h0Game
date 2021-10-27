@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.gb.base.BaseScreen;
 import ru.gb.math.Rect;
 import ru.gb.sprite.Background;
+import ru.gb.sprite.Ship;
 import ru.gb.sprite.Star;
 
 public class GameScreen extends BaseScreen {
@@ -18,6 +19,7 @@ public class GameScreen extends BaseScreen {
     private Background background;
 
     private Star[] stars;
+    private Ship ship;
 
     @Override
     public void show() {
@@ -25,6 +27,7 @@ public class GameScreen extends BaseScreen {
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         bg = new Texture("textures/bg.png");
         background = new Background(bg);
+        ship = new Ship(atlas);
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++){
             stars[i] = new Star(atlas);
@@ -42,6 +45,7 @@ public class GameScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
+        ship.resize(worldBounds);
         for (Star star : stars){
             star.resize(worldBounds);
         }
@@ -75,6 +79,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void update(float delta){
+        ship.update(delta);
         for (Star star : stars){
             star.update(delta);
         }
@@ -83,6 +88,7 @@ public class GameScreen extends BaseScreen {
     private void draw(){
         batch.begin();
         background.draw(batch);
+        ship.draw(batch);
         for (Star star : stars){
             star.draw(batch);
         }
