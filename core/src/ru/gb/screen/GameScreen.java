@@ -10,9 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 import ru.gb.base.BaseScreen;
 import ru.gb.math.Rect;
 import ru.gb.pool.BulletPool;
+import ru.gb.pool.EnemyPool;
 import ru.gb.sprite.Background;
-import ru.gb.sprite.Ship;
+import ru.gb.sprite.StarShip;
 import ru.gb.sprite.Star;
+import ru.gb.util.EnemyEmitter;
 
 public class GameScreen extends BaseScreen {
 
@@ -23,11 +25,15 @@ public class GameScreen extends BaseScreen {
     private Background background;
 
     private Star[] stars;
-    private Ship ship;
+    private StarShip starShip;
     private BulletPool bulletPool;
+    private EnemyPool enemyPool;
 
     private Music music;
     private Sound laserSound;
+    private Sound bulletSound;
+
+    private EnemyEmitter enemyEmitter;
 
     @Override
     public void show() {
@@ -36,15 +42,18 @@ public class GameScreen extends BaseScreen {
         music.setLooping(true);
         music.play();
         laserSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+        bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         bg = new Texture("textures/bg.png");
         background = new Background(bg);
         bulletPool = new BulletPool();
+        enemyPool = new EnemyPool(bulletPool, worldBounds, bulletSound);
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++){
             stars[i] = new Star(atlas);
         }
-        ship = new Ship(atlas, bulletPool, laserSound);
+        starShip = new StarShip(atlas, bulletPool, laserSound);
+        enemyEmitter = new EnemyEmitter(enemyPool, worldBounds, atlas);
     }
 
     @Override
@@ -62,63 +71,69 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars){
             star.resize(worldBounds);
         }
-        ship.resize(worldBounds);
+        starShip.resize(worldBounds);
     }
 
     @Override
     public void dispose() {
         super.dispose();
+        laserSound.dispose();
+        bulletSound.dispose();
         bg.dispose();
         atlas.dispose();
         bulletPool.dispose();
+        enemyPool.dispose();
         music.dispose();
-        laserSound.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        ship.keyDown(keycode);
+        starShip.keyDown(keycode);
         return super.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        ship.keyUp(keycode);
+        starShip.keyUp(keycode);
         return super.keyUp(keycode);
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        ship.touchDown(touch, pointer, button);
+        starShip.touchDown(touch, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        ship.touchUp(touch, pointer, button);
+        starShip.touchUp(touch, pointer, button);
         return false;
     }
 
     private void update(float delta){
         bulletPool.updateActiveObjects(delta);
+        enemyPool.updateActiveObjects(delta);
         for (Star star : stars){
             star.update(delta);
         }
-        ship.update(delta);
+        starShip.update(delta);
+        enemyEmitter.generate(delta);
     }
 
     private void freeAllDestroyed(){
         bulletPool.freeAllDestroyed();
+        enemyPool.freeAllDestroyed();
     }
 
     private void draw(){
         batch.begin();
         background.draw(batch);
         bulletPool.drawActiveObjects(batch);
+        enemyPool.drawActiveObjects(batch);
         for (Star star : stars){
             star.draw(batch);
         }
-        ship.draw(batch);
+        starShip.draw(batch);
         batch.end();
     }
 }
