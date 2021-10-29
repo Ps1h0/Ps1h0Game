@@ -2,6 +2,7 @@ package ru.gb.sprite;
 
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,11 +13,14 @@ import ru.gb.pool.BulletPool;
 
 public class Ship extends Sprite {
 
+    private static final float RELOAD_INTERVAL = 0.5f;
+
     private static final float HEIGHT = 0.15f;
     private static final float PADDING = 0.03f;
     private static final int INVALID_POINTER = -1;
 
     private final BulletPool bulletPool;
+    private final Sound bulletSound;
     private TextureRegion bulletRegion;
     private final Vector2 bulletV;
     private final float bulletHeight;
@@ -25,6 +29,8 @@ public class Ship extends Sprite {
     private final Vector2 v;
     private final Vector2 v0;
 
+    private float reloadTimer;
+
     private Rect worldBounds;
     private boolean pressedLeft;
     private boolean pressedRight;
@@ -32,9 +38,10 @@ public class Ship extends Sprite {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public Ship(TextureAtlas atlas, BulletPool bulletPool) {
+    public Ship(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
+        this.bulletSound = bulletSound;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletV = new Vector2(0, 0.5f);
         this.bulletHeight = 0.01f;
@@ -54,6 +61,12 @@ public class Ship extends Sprite {
     @Override
     public void update(float delta) {
         pos.mulAdd(v, delta);
+        reloadTimer += delta;
+        if (reloadTimer >= RELOAD_INTERVAL){
+            reloadTimer = 0f;
+            shoot();
+
+        }
         if (getRight() > worldBounds.getRight()){
             setRight(worldBounds.getRight());
             stop();
@@ -161,5 +174,6 @@ public class Ship extends Sprite {
     private void shoot(){
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, this.pos, bulletV, worldBounds, bulletHeight, damage);
+        bulletSound.play();
     }
 }
