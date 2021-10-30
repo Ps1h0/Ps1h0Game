@@ -25,9 +25,10 @@ public class GameScreen extends BaseScreen {
     private Background background;
 
     private Star[] stars;
-    private StarShip starShip;
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
+
+    private StarShip starShip;
 
     private Music music;
     private Sound laserSound;
@@ -46,12 +47,12 @@ public class GameScreen extends BaseScreen {
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         bg = new Texture("textures/bg.png");
         background = new Background(bg);
-        bulletPool = new BulletPool();
-        enemyPool = new EnemyPool(bulletPool, worldBounds, bulletSound);
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++){
             stars[i] = new Star(atlas);
         }
+        bulletPool = new BulletPool();
+        enemyPool = new EnemyPool(bulletPool, worldBounds, bulletSound);
         starShip = new StarShip(atlas, bulletPool, laserSound);
         enemyEmitter = new EnemyEmitter(enemyPool, worldBounds, atlas);
     }
@@ -77,25 +78,25 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
-        laserSound.dispose();
-        bulletSound.dispose();
         bg.dispose();
         atlas.dispose();
-        bulletPool.dispose();
+        bulletSound.dispose();
         enemyPool.dispose();
         music.dispose();
+        laserSound.dispose();
+        bulletPool.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
         starShip.keyDown(keycode);
-        return super.keyDown(keycode);
+        return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
         starShip.keyUp(keycode);
-        return super.keyUp(keycode);
+        return false;
     }
 
     @Override
@@ -111,11 +112,11 @@ public class GameScreen extends BaseScreen {
     }
 
     private void update(float delta){
-        bulletPool.updateActiveObjects(delta);
-        enemyPool.updateActiveObjects(delta);
         for (Star star : stars){
             star.update(delta);
         }
+        bulletPool.updateActiveObjects(delta);
+        enemyPool.updateActiveObjects(delta);
         starShip.update(delta);
         enemyEmitter.generate(delta);
     }
@@ -128,11 +129,11 @@ public class GameScreen extends BaseScreen {
     private void draw(){
         batch.begin();
         background.draw(batch);
-        bulletPool.drawActiveObjects(batch);
-        enemyPool.drawActiveObjects(batch);
         for (Star star : stars){
             star.draw(batch);
         }
+        bulletPool.drawActiveObjects(batch);
+        enemyPool.drawActiveObjects(batch);
         starShip.draw(batch);
         batch.end();
     }

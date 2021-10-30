@@ -12,10 +12,10 @@ import ru.gb.pool.BulletPool;
 
 public class StarShip extends Ship {
 
-    private static final float RELOAD_INTERVAL = 0.5f;
+    private static final float RELOAD_INTERVAL = 0.2f;
 
     private static final float HEIGHT = 0.15f;
-    private static final float PADDING = 0.03f;
+    private static final float PADDING = 0.05f;
     private static final int INVALID_POINTER = -1;
 
     private boolean pressedLeft;

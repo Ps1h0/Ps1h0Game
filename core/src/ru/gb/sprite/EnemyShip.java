@@ -17,7 +17,7 @@ public class EnemyShip extends Ship {
         this.bulletV = new Vector2();
         this.bulletPos = new Vector2();
         this.v = new Vector2();
-        this.v0 = new Vector2(0,0);
+        this.v0 = new Vector2();
     }
 
     @Override
