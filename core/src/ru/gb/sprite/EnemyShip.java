@@ -22,10 +22,19 @@ public class EnemyShip extends Ship {
 
     @Override
     public void update(float delta) {
-        super.update(delta);
-        if (getBottom() < worldBounds.getBottom()){
-            destroy();
+        pos.mulAdd(v, delta);
+        reloadTimer += delta;
+        if (reloadTimer >= reloadInterval) {
+            reloadTimer = 0f;
+            shoot();
         }
+        bulletPos.set(pos);
+    }
+
+    private void shoot(){
+        Bullet bullet = bulletPool.obtain();
+        bullet.set(this, bulletRegion, bulletPos, bulletV, worldBounds, bulletHeight, damage);
+        bulletSound.play();
     }
 
     public void set(

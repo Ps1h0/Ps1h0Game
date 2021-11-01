@@ -37,14 +37,9 @@ public class Rect {
         return pos.y - halfHeight;
     }
 
-    public Vector2 getPos() {
-        return pos;
-    }
-
     public float getHalfWidth() {
         return halfWidth;
     }
-
 
     public float getHalfHeight() {
         return halfHeight;
