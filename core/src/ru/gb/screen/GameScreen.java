@@ -1,5 +1,6 @@
 package ru.gb.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -25,6 +26,8 @@ public class GameScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 64;
 
+    private final Game game;
+
     private TextureAtlas atlas;
     private Texture bg;
     private Background background;
@@ -42,6 +45,10 @@ public class GameScreen extends BaseScreen {
     private Sound explosionSound;
 
     private EnemyEmitter enemyEmitter;
+
+    public GameScreen(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void show() {
@@ -134,6 +141,9 @@ public class GameScreen extends BaseScreen {
             enemyEmitter.generate(delta);
         }
         explosionPool.updateActiveObjects(delta);
+        if (starShip.isDestroyed()){
+            game.setScreen(new GameOverScreen(game));
+        }
     }
 
     private void chekCollision(){
