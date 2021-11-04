@@ -18,9 +18,4 @@ public class GameOver extends Sprite {
         setHeightProportion(HEIGHT);
         setTop(0);
     }
-
-    private void pulsate(){
-        scale = 0.9f;
-    }
-
 }
