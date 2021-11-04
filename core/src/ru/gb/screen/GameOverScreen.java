@@ -10,10 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import ru.gb.base.BaseScreen;
 import ru.gb.math.Rect;
 import ru.gb.sprite.Background;
+import ru.gb.sprite.GameOver;
 import ru.gb.sprite.NewGameButton;
-import ru.gb.sprite.PlayButton;
 import ru.gb.sprite.Star;
-import ru.gb.util.EnemyEmitter;
 
 public class GameOverScreen extends BaseScreen {
 
@@ -23,7 +22,7 @@ public class GameOverScreen extends BaseScreen {
 
     private TextureAtlas atlas;
     private Texture bg;
-    private Texture gameOver;
+    private GameOver gameOver;
     private Background background;
 
     private Star[] stars;
@@ -49,7 +48,8 @@ public class GameOverScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++){
             stars[i] = new Star(atlas);
         }
-        newGameButton = new NewGameButton(atlas);
+        newGameButton = new NewGameButton(atlas, game);
+        gameOver = new GameOver(atlas);
     }
 
     @Override
@@ -67,6 +67,7 @@ public class GameOverScreen extends BaseScreen {
             star.resize(worldBounds);
         }
         newGameButton.resize(worldBounds);
+        gameOver.resize(worldBounds);
     }
 
     @Override
@@ -95,7 +96,7 @@ public class GameOverScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        newGameButton.touchDown(touch, pointer, button);
+        newGameButton.touchUp(touch, pointer, button);
         return false;
     }
 
@@ -112,6 +113,7 @@ public class GameOverScreen extends BaseScreen {
             star.draw(batch);
         }
         newGameButton.draw(batch);
+        gameOver.draw(batch);
         batch.end();
     }
 }
