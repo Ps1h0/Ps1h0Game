@@ -20,6 +20,7 @@ public class EnemyShip extends Ship {
         this.bulletPos = new Vector2();
         this.v = new Vector2();
         this.v0 = new Vector2();
+        autoShoot = true;
     }
 
     @Override

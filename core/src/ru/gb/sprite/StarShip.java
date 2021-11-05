@@ -1,6 +1,5 @@
 package ru.gb.sprite;
 
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -13,7 +12,7 @@ import ru.gb.pool.ExplosionPool;
 
 public class StarShip extends Ship {
 
-    private static final float RELOAD_INTERVAL = 0.2f;
+    private static final float RELOAD_INTERVAL = 0.7f;
 
     private static final float HEIGHT = 0.15f;
     private static final float PADDING = 0.05f;
@@ -103,6 +102,10 @@ public class StarShip extends Ship {
 
     public boolean keyDown(int keycode) {
         switch (keycode){
+            case Input.Keys.W:
+            case Input.Keys.UP:
+                shoot();
+                break;
             case Input.Keys.A:
             case Input.Keys.LEFT:
                 pressedLeft = true;
@@ -112,6 +115,9 @@ public class StarShip extends Ship {
             case Input.Keys.RIGHT:
                 pressedRight = true;
                 moveRight();
+                break;
+            case Input.Keys.SPACE:
+                autoShoot = !autoShoot;
                 break;
         }
         return false;
@@ -160,6 +166,4 @@ public class StarShip extends Ship {
     private void stop(){
         v.setZero();
     }
-
-
 }
