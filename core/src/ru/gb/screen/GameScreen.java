@@ -19,7 +19,7 @@ import ru.gb.sprite.Bullet;
 import ru.gb.sprite.EnemyShip;
 import ru.gb.sprite.GameOver;
 import ru.gb.sprite.NewGameButton;
-import ru.gb.sprite.StarShip
+import ru.gb.sprite.StarShip;
 import ru.gb.sprite.Star;
 import ru.gb.sprite.StarShip;
 import ru.gb.util.EnemyEmitter;
