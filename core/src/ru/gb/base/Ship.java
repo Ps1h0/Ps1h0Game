@@ -1,5 +1,7 @@
 package ru.gb.base;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -23,6 +25,7 @@ public class Ship extends Sprite{
     protected float bulletHeight;
     protected int damage;
     protected int hp;
+    protected boolean autoShoot = false;
 
     protected Vector2 v;
     protected Vector2 v0;
@@ -43,11 +46,13 @@ public class Ship extends Sprite{
     @Override
     public void update(float delta) {
         pos.mulAdd(v, delta);
-        reloadTimer += delta;
-        if (reloadTimer >= reloadInterval){
-            reloadTimer = 0f;
-            bulletPos.set(pos);
-            shoot();
+        if (autoShoot || Gdx.app.getType().name().equals("Android")){
+            reloadTimer += delta;
+            if (reloadTimer >= reloadInterval){
+                reloadTimer = 0f;
+                bulletPos.set(pos);
+                shoot();
+            }
         }
         damageAnimateTimer += delta;
         if (damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL) {
@@ -75,7 +80,7 @@ public class Ship extends Sprite{
         boom();
     }
 
-    private void shoot(){
+    public void shoot(){
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, bulletPos, bulletV, worldBounds, bulletHeight, damage);
         bulletSound.play(0.2f);
