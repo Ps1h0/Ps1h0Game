@@ -1,6 +1,5 @@
 package ru.gb.sprite;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.gb.base.BaseButton;
@@ -11,11 +10,11 @@ public class NewGameButton extends BaseButton {
 
     private static final float HEIGHT = 0.05f;
 
-    private final Game game;
+    private final GameScreen gameScreen;
 
-    public NewGameButton(TextureAtlas atlas, Game game) {
+    public NewGameButton(TextureAtlas atlas, GameScreen gameScreen) {
         super(atlas.findRegion("button_new_game"));
-        this.game = game;
+        this.gameScreen = gameScreen;
     }
 
     @Override
@@ -26,6 +25,6 @@ public class NewGameButton extends BaseButton {
 
     @Override
     public void action() {
-        game.setScreen(new GameScreen(game));
+        gameScreen.startNewGame();
     }
 }
