@@ -6,10 +6,12 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.List;
 
 import ru.gb.base.BaseScreen;
+import ru.gb.base.Font;
 import ru.gb.math.Rect;
 import ru.gb.pool.BulletPool;
 import ru.gb.pool.EnemyPool;
@@ -19,7 +21,6 @@ import ru.gb.sprite.Bullet;
 import ru.gb.sprite.EnemyShip;
 import ru.gb.sprite.GameOver;
 import ru.gb.sprite.NewGameButton;
-import ru.gb.sprite.StarShip;
 import ru.gb.sprite.Star;
 import ru.gb.sprite.StarShip;
 import ru.gb.util.EnemyEmitter;
@@ -27,6 +28,10 @@ import ru.gb.util.EnemyEmitter;
 public class GameScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 64;
+    private static final float FONT_SIZE = 0.02f;
+    private static final String FRAGS = "Frags: ";
+    private static final String HP = "HP: ";
+    private static final String LEVEL = "Level: ";
 
     private TextureAtlas atlas;
     private Texture bg;
@@ -50,6 +55,12 @@ public class GameScreen extends BaseScreen {
     private NewGameButton newGameButton;
 
     private int frags;
+
+    private StringBuilder sbFrags;
+    private StringBuilder sbHp;
+    private StringBuilder sbLevel;
+
+    private Font font;
 
     @Override
     public void show() {
@@ -75,6 +86,11 @@ public class GameScreen extends BaseScreen {
         gameOver = new GameOver(atlas);
         newGameButton = new NewGameButton(atlas, this);
         frags = 0;
+        sbFrags = new StringBuilder();
+        sbHp = new StringBuilder();
+        sbLevel = new StringBuilder();
+        font = new Font("font/font.fnt", "font/font.png");
+        font.setSize(FONT_SIZE);
     }
 
     public void startNewGame(){
@@ -118,6 +134,7 @@ public class GameScreen extends BaseScreen {
         bulletPool.dispose();
         explosionPool.dispose();
         explosionSound.dispose();
+        font.dispose();
     }
 
     @Override
@@ -160,7 +177,7 @@ public class GameScreen extends BaseScreen {
             bulletPool.updateActiveObjects(delta);
             enemyPool.updateActiveObjects(delta);
             starShip.update(delta);
-            enemyEmitter.generate(delta);
+            enemyEmitter.generate(delta, frags);
         }
         explosionPool.updateActiveObjects(delta);
     }
@@ -192,6 +209,9 @@ public class GameScreen extends BaseScreen {
             for (EnemyShip enemyShip: enemyShipList){
                 if (enemyShip.isBulletCollision(bullet)){
                     enemyShip.damage(bullet.getDamage());
+                    if (enemyShip.isDestroyed()){
+                        frags++;
+                    }
                     bullet.destroy();
                 }
             }
@@ -219,6 +239,16 @@ public class GameScreen extends BaseScreen {
             newGameButton.draw(batch);
         }
         explosionPool.drawActiveObjects(batch);
+        printInfo();
         batch.end();
+    }
+
+    private void printInfo(){
+        sbFrags.setLength(0);
+        font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft() + 0.01f, worldBounds.getTop() - 0.01f);
+        sbHp.setLength(0);
+        font.draw(batch, sbHp.append(HP).append(starShip.getHp()), worldBounds.pos.x, worldBounds.getTop() - 0.01f, Align.center);
+        sbLevel.setLength(0);
+        font.draw(batch, sbLevel.append(LEVEL).append(enemyEmitter.getLevel()), worldBounds.getRight() - 0.01f, worldBounds.getTop() - 0.01f, Align.right);
     }
 }
