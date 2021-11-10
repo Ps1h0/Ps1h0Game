@@ -4,8 +4,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 import ru.gb.base.BaseScreen;
+import ru.gb.base.Font;
 import ru.gb.math.Rect;
 import ru.gb.sprite.Background;
 import ru.gb.sprite.ExitButton;
@@ -16,6 +18,8 @@ import ru.gb.sprite.Star;
 public class MenuScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 256;
+    private static final float FONT_SIZE = 0.02f;
+    private static final String RULES = "Press left/right or 'a'/'d' to move\n Press Space to on/off auto shoot";
 
     private final Game game;
 
@@ -27,6 +31,8 @@ public class MenuScreen extends BaseScreen {
 
     private PlayButton playButton;
     private ExitButton exitButton;
+
+    private Font font;
 
     public MenuScreen(Game game) {
         this.game = game;
@@ -44,6 +50,8 @@ public class MenuScreen extends BaseScreen {
         }
         playButton = new PlayButton(atlas, game);
         exitButton = new ExitButton(atlas);
+        font = new Font("font/font.fnt", "font/font.png");
+        font.setSize(FONT_SIZE);
     }
 
     @Override
@@ -69,6 +77,7 @@ public class MenuScreen extends BaseScreen {
         super.dispose();
         bg.dispose();
         atlas.dispose();
+        font.dispose();
     }
 
     @Override
@@ -99,6 +108,11 @@ public class MenuScreen extends BaseScreen {
         }
         playButton.draw(batch);
         exitButton.draw(batch);
+        printRules();
         batch.end();
+    }
+
+    private void printRules(){
+        font.draw(batch, RULES, worldBounds.pos.x, worldBounds.pos.y, Align.center);
     }
 }
