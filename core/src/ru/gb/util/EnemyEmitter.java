@@ -69,10 +69,10 @@ public class EnemyEmitter {
             if (type < 0.5f){
                 enemy.set(
                         enemySmallRegions,
-                        enemySmallV,
+                        enemySmallV.cpy().scl(level),
                         bulletRegion,
                         ENEMY_SMALL_BULLET_HEIGHT,
-                        enemySmallBulletV,
+                        enemySmallBulletV.cpy().scl(level),
                         ENEMY_SMALL_BULLET_DAMAGE * level,
                         ENEMY_SMALL_HP,
                         ENEMY_SMALL_RELOAD_INTERVAL,
@@ -81,10 +81,10 @@ public class EnemyEmitter {
             } else if (type < 0.8){
                 enemy.set(
                         enemyMediumRegions,
-                        enemyMediumV,
+                        enemyMediumV.cpy().scl(level),
                         bulletRegion,
                         ENEMY_MEDIUM_BULLET_HEIGHT,
-                        enemyMediumBulletV,
+                        enemyMediumBulletV.cpy().scl(level),
                         ENEMY_MEDIUM_BULLET_DAMAGE * level,
                         ENEMY_MEDIUM_HP,
                         ENEMY_MEDIUM_RELOAD_INTERVAL,
@@ -93,10 +93,10 @@ public class EnemyEmitter {
             } else{
                 enemy.set(
                         enemyBigRegions,
-                        enemyBigV,
+                        enemyBigV.cpy().scl(level),
                         bulletRegion,
                         ENEMY_BIG_BULLET_HEIGHT,
-                        enemyBigBulletV,
+                        enemyBigBulletV.cpy().scl(level),
                         ENEMY_BIG_BULLET_DAMAGE * level,
                         ENEMY_BIG_HP,
                         ENEMY_BIG_RELOAD_INTERVAL,
